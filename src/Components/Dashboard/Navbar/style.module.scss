@@ -1,0 +1,35 @@
+.logo {
+    background: #001529; 
+  width: 200px;
+  height: 60px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sliderContainer{
+  :global(.ant-layout-sider-children){
+    height: 100vh;
+  }
+  :global(.ant-layout-sider-children){
+    background-color: #001529 !important;
+  }
+}
+.menu{
+ :global(.ant-menu){
+    background: #001529;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    border: none !important;
+  }
+  :global(.ant-menu-item a){
+    color: #fff;
+  }
+  :global(.ant-menu-item-selected){
+    background: #03223f !important;
+  }
+  
+}

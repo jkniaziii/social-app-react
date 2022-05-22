@@ -1,0 +1,61 @@
+import React, { useEffect, useState } from 'react'
+import { Layout, Menu } from 'antd';
+import {
+  UserOutlined,
+  VideoCameraOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
+
+import styles from './style.module.scss'
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import Profile from '../Profile';
+import Todo from '../Todo';
+import Weather from '../Weather';
+import Articles from '../Articles';
+import { useStore } from '../../../store/rootStore';
+import { observer } from 'mobx-react-lite';
+
+const Navbar = observer(() => {
+  const { Counter: { setArray, addTodo, removeTodo } } = useStore("");
+  const { Header, Sider, Content } = Layout;
+  const path = useLocation()
+  const [selectedKey, setSelectedKey] = useState('/')
+ 
+    return (
+      <Layout>
+        <Sider className={styles.sliderContainer}>
+          <div className={styles.logo}>
+            DASHBOARD
+            </div>
+            <div className={styles.menu}>
+            <Menu
+             defaultSelectedKeys={[selectedKey]}>
+            <Menu.Item key='/'><Link to="/">Profile</Link></Menu.Item>
+            <Menu.Item key='/todo'><Link to="todo">Todo</Link></Menu.Item>
+            <Menu.Item key='/articles'><Link to="articles">Articles</Link></Menu.Item>
+            <Menu.Item key='/weather'><Link to="weather">Weather</Link></Menu.Item>
+           </Menu>
+           </div>
+        </Sider>
+        <Layout className="site-layout">
+          <Header className="site-layout-background" style={{ padding: 0 }}>
+          </Header>
+          <Content
+            className="site-layout-background"
+            style={{
+
+            }}
+          >
+            <Routes>
+              <Route path="/" element={<Profile />} />
+              <Route path="todo" element={<Todo />} />
+              <Route path="articles" element={<Articles />} />
+              <Route path="weather" element={<Weather />} />
+            </Routes>
+          </Content>
+        </Layout>
+      </Layout>
+  )
+})
+
+export default Navbar;
