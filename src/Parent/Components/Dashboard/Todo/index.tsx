@@ -49,7 +49,7 @@ const Todo = observer(() => {
     setInput(item.name);
     setEditId(item.id);
   }
-  useEffect(() => {
+  useEffect(() => { 
     setList();
   }, []);
 
