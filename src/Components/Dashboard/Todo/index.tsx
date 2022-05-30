@@ -2,18 +2,22 @@ import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './style.module.scss'
 import { useStore } from './../../../store/rootStore';
 import { observer } from 'mobx-react-lite';
-import { getId } from '../../../utils/Functions';
+import { getId, getTime } from '../../../utils/Functions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/fontawesome-free-solid';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { toJS } from 'mobx';
+import { Table } from 'antd';
+import moment from 'moment';
+import { useNavigate, Link } from 'react-router-dom';
 const Todo = observer(() => {
 
-  const { Counter: { todoList, setArray, addTodo, removeTodo, editTodo } } = useStore("");
+  const { Counter: { searchedData, todoList, setArray, addTodo, removeTodo, editTodo, fetchPost } } = useStore("");
   const [input, setInput] = useState('');
   const [editId, setEditId] = useState('');
   const [isError, setIsError] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  
+  let history = useNavigate();
   const focus = useRef<HTMLInputElement>(null);
   const submitHandle = () => {
     if (input.trim() === '') {
@@ -26,7 +30,7 @@ const Todo = observer(() => {
       setInput('')
       setIsEdit(false)
     } else {
-      addTodo({ name: input, id: getId() })
+      addTodo({ name: input, id: getId(), time: getTime() })
       setInput('')
       setIsEdit(false)
     }
@@ -53,8 +57,55 @@ const Todo = observer(() => {
     localStorage.setItem("list", JSON.stringify(todoList));
   }, [todoList?.length]);
    
+  const columns= [
+    {
+      title: 'Keyword',
+      dataIndex: 'keyword',
+      key: 'name',
+      render: (_ : any, data: any) => {
+       
+        return  <div style={{fontWeight: 'bold'}}>{data?.name}</div>
+      },
+      width:' 40%',
+    },
+    {
+      title: 'Searched On',
+      dataIndex: 'searched',
+      key: 'searched',
+      render: (_ : any, data: any) => {
+       return <div style={{fontWeight: '600'}}>{moment(data?.time).format('D MMMM YYYY h  : mm : ss A')}</div>
+      },
+      width:' 40%',
+    },
+    {
+      title: 'View Details',
+      dataIndex: 'detail',
+      key: 'details',
+      render: (_ : any, data: any) => {
+      return <Link 
+     to={`/${data.name}`}
+      className={styles.dtlBtn}>{'View Details'}</Link>
+      },
+      width:' 15%',
+    },
+    {
+      title: '',
+      dataIndex: 'options',
+      key: 'options',
+      render: (data: any) => {
+      return  <div><FontAwesomeIcon icon={faTrash as IconProp} /></div>
+      },
+      width:' 5%',
+    },
+
+  ];
+
   return (
     <div className={styles.mainContainer}>
+         <button
+      onClick={()=>{fetchPost()}}>
+        TEAST
+      </button>
       <div className={styles.container}>
         <input
           ref={focus}
@@ -66,19 +117,13 @@ const Todo = observer(() => {
           className={styles.button}>{isEdit ? 'Update' : 'Add'}</button>
       </div>
       <div className={styles.list}>
-        {todoList?.map((item: any) => {
-          return <div key={item.id} className={styles.listItem}>
-            <div>{item.name}</div>
-            <div>
-              <FontAwesomeIcon
-                onClick={() => editHandle(item)}
-                style={{ fontSize: 15, cursor: 'pointer', color: 'yellow' }} icon={faEdit as IconProp} />
-              <FontAwesomeIcon
-                onClick={() => removeTodo(item.id)}
-                style={{ fontSize: 15, cursor: 'pointer', color: 'red', marginLeft: 5 }} icon={faTrash as IconProp} />
-            </div>
-          </div>
-        })}
+       
+       {todoList && <Table 
+       // @ts-ignore 
+       columns={columns} 
+       dataSource={[...todoList]}
+       pagination={false}
+        />}
       </div>
     </div>
   )

@@ -7,16 +7,22 @@ import {
 } from '@ant-design/icons';
 
 import styles from './style.module.scss'
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useParams, } from 'react-router-dom';
 import Profile from '../Profile';
 import Todo from '../Todo';
 import Weather from '../Weather';
-import Articles from '../Articles';
-import { useStore } from '../../../store/rootStore';
+import Cart from '../Cart';
 import { observer } from 'mobx-react-lite';
+import DetailPage from './../Todo/DetailPage/index';
 
 const Navbar = observer(() => {
-  const { Counter: { setArray, addTodo, removeTodo } } = useStore("");
+  function ProfilePage() {
+    // Get the userId param from the URL.
+    let { userId } = useParams();
+    // ...
+    return <div>HELLO WORD</div>
+  }
+  
   const { Header, Sider, Content } = Layout;
   const path = useLocation()
   const [selectedKey, setSelectedKey] = useState('/')
@@ -32,7 +38,7 @@ const Navbar = observer(() => {
              defaultSelectedKeys={[selectedKey]}>
             <Menu.Item key='/'><Link to="/">Profile</Link></Menu.Item>
             <Menu.Item key='/todo'><Link to="todo">Todo</Link></Menu.Item>
-            <Menu.Item key='/articles'><Link to="articles">Articles</Link></Menu.Item>
+            <Menu.Item key='/cart'><Link to="cart">Cart</Link></Menu.Item>
             <Menu.Item key='/weather'><Link to="weather">Weather</Link></Menu.Item>
            </Menu>
            </div>
@@ -49,8 +55,10 @@ const Navbar = observer(() => {
             <Routes>
               <Route path="/" element={<Profile />} />
               <Route path="todo" element={<Todo />} />
-              <Route path="articles" element={<Articles />} />
+               {/*@ts-ignore */}
+              <Route path="cart" element={<Cart />} />
               <Route path="weather" element={<Weather />} />
+              <Route path=":keyword"  element={<DetailPage />} />
             </Routes>
           </Content>
         </Layout>

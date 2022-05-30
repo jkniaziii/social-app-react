@@ -23,10 +23,8 @@
         margin-top: 15px;
 }
 .list{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    margin: 50px;
+    // width: 100%;
 }
 
 .listItem{
@@ -59,4 +57,19 @@
     border: none;
     border-radius: 3px;
     width: 100px;
+}
+
+.dtlBtn{
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    background: #174a7b;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    width: 130px;
 }

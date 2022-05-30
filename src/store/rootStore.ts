@@ -1,12 +1,13 @@
 // import makeInspectable from 'mobx-devtools-mst';
 import {applySnapshot, getSnapshot, types} from 'mobx-state-tree';
 import {useMemo} from 'react';
+import { Cart, initCart } from './cartStore';
 import { Counter, initCounter } from './todoStore';
-// import { Counter, initCounter } from './Counter';
 
 
 const RootStore = types.model({
     Counter: Counter,
+    Cart: Cart,
 }).actions(self => {
   let initialState = {};
   return {
@@ -19,13 +20,11 @@ const RootStore = types.model({
   };
 });
 
-// export function resetStore() {
-//   store.reset();
-// }
-
 export function initializeStore(snapshot = null) {
   const _store = RootStore.create({
       Counter: initCounter(),
+      Cart: initCart()
+
     });
   if (snapshot) {
     applySnapshot(_store, snapshot);

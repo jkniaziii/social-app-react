@@ -1,15 +1,32 @@
 
+import axios from "axios";
 import { toJS } from "mobx";
 import { cast, flow, types, } from "mobx-state-tree";
 
 
 const todoModal = types.model({
     id: types.maybeNull(types.string),
+    name: types.maybeNull(types.string),
+    time: types.maybeNull(types.number)
+})
+
+const ImageModal = types.model({
+    src: types.maybeNull(types.string),
+})
+
+const PageMapModal =  types.model({
+    cse_image: types.maybeNull(types.array(ImageModal)),
     name: types.maybeNull(types.string)
+})
+
+const SearchedModal = types.model({
+    title: types.maybeNull(types.string),
+    snippet: types.maybeNull(types.string),
+    pagemap: types.maybeNull(PageMapModal)
 })
 export const Counter = types.model('counter', {
     todoList: types.maybeNull(types.array(todoModal)),
-    isEdit: types.maybeNull(types.boolean)
+    searchedData: types.maybeNull(types.array(SearchedModal)),
 
 }).actions((self: any) => {
     const setArray = (array: any) => {
@@ -35,19 +52,15 @@ export const Counter = types.model('counter', {
         }
     }
 
-    const fetchData = flow(function* fetchData() {
-        //     const responce = yield axios.get('https://jsonplaceholder.typicode.com/users');
-        //    self.jsonData  =(responce.data.map(item =>item.name))
-        //    return self.jsonData
-    })
-
     const fetchPost = flow(function* fetchPost() {
-        //  const postResponce = yield axios.get('https://jsonplaceholder.typicode.com/posts')
-        //  self.postData = postResponce.data.map(item=>item.body);
-        //  return self.postData;
+        const postResponce = yield axios.get(`https://www.googleapis.com/customsearch/v1?key=AIzaSyCmzL3tm9ZO_30XEB-vL1t0p-bcxsXhRPM&cx=df37df1fcdbabcdf8&q=pakistan`)
+         self.searchedData = postResponce?.data?.items
+        console.log("postResponce ___", postResponce.data.items)
     })
 
-    return { addTodo, removeTodo, setArray, fetchData, fetchPost, editTodo }
+
+
+    return { addTodo, removeTodo, setArray, fetchPost, editTodo }
 })
 
 
@@ -58,6 +71,6 @@ export function initCounter() {
 
     return Counter.create({
         todoList: [],
-        isEdit: false,
+       
     })
 };
