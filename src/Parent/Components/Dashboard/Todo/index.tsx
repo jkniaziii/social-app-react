@@ -10,6 +10,7 @@ import { toJS } from 'mobx';
 import { Table } from 'antd';
 import moment from 'moment';
 import { useNavigate, Link } from 'react-router-dom';
+
 const Todo = observer(() => {
 
   const { Counter: { searchedData, todoList, setArray, addTodo, removeTodo, editTodo, fetchPost } } = useStore("");
@@ -82,18 +83,31 @@ const Todo = observer(() => {
       dataIndex: 'detail',
       key: 'details',
       render: (_ : any, data: any) => {
-      return <Link 
-     to={`/${data.name}`}
-      className={styles.dtlBtn}>{'View Details'}</Link>
+      return <div 
+      onClick={()=>history(`detail/${data.name}`)}
+      className={styles.dtlBtn}>{'View Details'}</div>
       },
       width:' 15%',
     },
     {
-      title: '',
+      title: 'Delete',
       dataIndex: 'options',
       key: 'options',
-      render: (data: any) => {
-      return  <div><FontAwesomeIcon icon={faTrash as IconProp} /></div>
+      render: (_ : any, data: any) => {
+      return  <div
+      onClick={()=>removeTodo(data.id)}
+      ><FontAwesomeIcon icon={faTrash as IconProp} /></div>
+      },
+      width:' 5%',
+    },
+    {
+      title: 'Edit',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: (_ : any, data: any) => {
+      return  <div
+      onClick={()=>editHandle(data)}
+      ><FontAwesomeIcon icon={faEdit as IconProp} /></div>
       },
       width:' 5%',
     },
@@ -102,10 +116,6 @@ const Todo = observer(() => {
 
   return (
     <div className={styles.mainContainer}>
-         <button
-      onClick={()=>{fetchPost()}}>
-        TEAST
-      </button>
       <div className={styles.container}>
         <input
           ref={focus}

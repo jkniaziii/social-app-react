@@ -27,7 +27,7 @@ const Navbar = observer(() => {
   const path = useLocation()
   const [selectedKey, setSelectedKey] = useState('/')
  
-  
+
     return (
       <Layout>
         <Sider className={styles.sliderContainer}>
@@ -59,7 +59,7 @@ const Navbar = observer(() => {
                {/*@ts-ignore */}
               <Route path="cart" element={<Cart />} />
               <Route path="weather" element={<Weather />} />
-              <Route path=":keyword"  element={<DetailPage />} />
+              <Route path="todo/detail/:keyword"  element={<DetailPage />} />
             </Routes>
           </Content>
         </Layout>

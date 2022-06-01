@@ -28,7 +28,10 @@ export const Counter = types.model('counter', {
     todoList: types.maybeNull(types.array(todoModal)),
     searchedData: types.maybeNull(types.array(SearchedModal)),
 
-}).actions((self: any) => {
+}).views(self => ({
+    get numberOfChildren() {
+        return self.searchedData
+    }})).actions((self: any) => {
     const setArray = (array: any) => {
         self.todoList = array;
     }
@@ -52,10 +55,11 @@ export const Counter = types.model('counter', {
         }
     }
 
-    const fetchPost = flow(function* fetchPost() {
-        const postResponce = yield axios.get(`https://www.googleapis.com/customsearch/v1?key=AIzaSyCmzL3tm9ZO_30XEB-vL1t0p-bcxsXhRPM&cx=df37df1fcdbabcdf8&q=pakistan`)
-         self.searchedData = postResponce?.data?.items
-        console.log("postResponce ___", postResponce.data.items)
+    const fetchPost = flow(function* fetchPost(keyword: any) {
+        const postResponce = yield axios.get(`https://www.googleapis.com/customsearch/v1?key=AIzaSyCmzL3tm9ZO_30XEB-vL1t0p-bcxsXhRPM&cx=df37df1fcdbabcdf8&q=${keyword}`)
+          console.log("postResponce API", postResponce?.data?.items)
+        const temp = postResponce?.data?.items
+          self.searchedData = temp;
     })
 
 
@@ -71,6 +75,7 @@ export function initCounter() {
 
     return Counter.create({
         todoList: [],
+        searchedData: []
        
     })
 };
