@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useStore } from '../../../../store/rootStore';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-
+import DetailCard from './card';
+import styles from './style.module.scss'
 
 
 const DetailPage = observer(()=> {
@@ -14,19 +15,23 @@ const DetailPage = observer(()=> {
       fetchPost(keyword)
      },[])
 
-     console.log("numberOfChildren CC ___", toJS(numberOfChildren));
+     console.log("numberOfChildren CC ___", toJS(searchedData));
      
     return (
-      <>    <div>DETAILS : {keyword}</div>
+      <>   
+      {/* <div>DETAILS : {keyword}</div> */}
+      <div className={styles.mainContainer}>
      {searchedData && searchedData?.map(item =>{
-         console.log("ITEM ___", toJS(item))
-     {/*@ts-ignore */}
-      return <> 
-      <h1>{item?.title}</h1>
-      <div>{item?.snippet}</div>
+    return <> 
+        <DetailCard
+         
+        img={item?.pagemap?.cse_image?.length ? item?.pagemap?.cse_image[0]?.src : 'https://img.lovepik.com/element/40170/0204.png_860.png'}
+        title={item?.title}
+        snippet={item?.snippet}
+        />
       </>
      })}
-   
+   </div>
     </>
 
   )
